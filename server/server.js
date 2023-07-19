@@ -18,11 +18,18 @@ app.get("/",(req,res)=>{
     
 })
 
+app.get("/user",(req,res)=>{
+    knex("user_profile")
+    .select("*")
+    .then(data=>res.status(200).send(data))
+    
+})
+
 
 app.post("/",(req,res)=>{
     
     const body =req.body
-    
+    console.log(body)
     knex("item_list")
     .insert(body)
     .returning('id')
@@ -73,5 +80,24 @@ app.delete("/",(req,res)=>{
     );
 
 })
+
+
+app.post("/user",(req,res)=>{
+    
+    const body =req.body
+    console.log("body",body)
+    knex("user_profile")
+    .insert(body)
+    .returning('id')
+    .then((ids)=>
+    res.status(201).json({
+        message:"Posted succesfully",
+        id:ids[0].id}))
+    
+        
+})
+
+
+
 
 app.listen(port, ()=> console.log(`Hello from ${port}`))
