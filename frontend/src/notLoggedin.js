@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 
 
@@ -7,7 +8,7 @@ import styled from 'styled-components';
 
 const NotLoggedin =()=>{
 
-
+    const Navigate=useNavigate();
     const [items,setItems]=useState([])
 
     useEffect(()=>{
@@ -21,13 +22,13 @@ const NotLoggedin =()=>{
     const itemMap=()=>{
         return(
           items.map(item=>
-          <My_Templates id="itemsNon">
+          <My_Templates id="itemsNon" onClick={()=>{Navigate(`/specific/item/${0}`,{state:item} ); window.location.reload(false)}}>
           <div>
                 Name: {item.item_name}
             </div>
-            <div>
+            <Desc >
                 Descr:{item.description}
-            </div>
+            </Desc>
             <div>
                 Quantity: {item.quantity}
             </div>
@@ -59,7 +60,7 @@ background-color: #86d5e8a3;
 
 margin: 13px;
 padding: 10px;
-
+text-overflow: ellipsis
 border: 2px solid grey;
 border-radius:15px;
 box-shadow: 0px 8px 16px 4px rgba(0,0,0,0.3);
@@ -68,5 +69,21 @@ word-wrap: break-word;
  &:hover{
     background-color: #28a6c5a3;
 }
+
+`
+
+
+const Desc=styled.div`
+Max-Length:100;
+overflow-x:hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+
+&:hover{
+    background-color:red;
+    white-space:wrap
+}
+
+
 
 `

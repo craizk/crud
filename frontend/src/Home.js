@@ -96,7 +96,7 @@ return(
   
   
   items.map((item,index)=>
-    <My_Templates>
+    <>
   <Delete key={`${index}`} onClick={()=>{deleting(item);window.location.reload(false)}}>Delete</Delete>
   <Edit key={`${index}`} id='item' onClick={setIsOpen}>Edit</Edit>
   
@@ -133,20 +133,24 @@ return(
         
        </div>
        </ReactModal>
+       </div>
        <div onClick={()=>{Navigate(`/specific/item/${location.state}`,{state:item} ); window.location.reload(false)}} >
-       <div>
+            <My_Templates>
+            <div>
                 Name: {item.item_name}
             </div>
-            <div>
+            <Desc >
                 Descr:{item.description}
-            </div>
+            </Desc>
             <div>
                 Quantity: {item.quantity}
             </div>
-    </div>
+            </My_Templates>
+            
+    
     </div>
   </div>
-  </My_Templates>
+  </>
   )
   
   
@@ -199,7 +203,7 @@ background-color: #86d5e8a3;
 
 margin: 13px;
 padding: 10px;
-
+text-overflow: ellipsis
 border: 2px solid grey;
 border-radius:15px;
 box-shadow: 0px 8px 16px 4px rgba(0,0,0,0.3);
@@ -211,16 +215,37 @@ word-wrap: break-word;
 
 `
 const Delete =styled.div`
-
+width:75px;
 &:hover{
+  
   background-color: red;
 }
 
 `
 const Edit=styled.div`
-
+width:75px;
 &:hover{
   background-color: yellow;
 }
+
+`
+
+
+const ItemWrapper=styled.div`
+word-wrap: normal|break-word|initial|inherit;
+
+`
+const Desc=styled.div`
+Max-Length:100;
+overflow-x:hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+
+&:hover{
+    background-color:red;
+    white-space:wrap
+}
+
+
 
 `
