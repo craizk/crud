@@ -40,8 +40,8 @@ app.get("/item/:id",(req,res)=>{
 
 app.post("/item/:id",(req,res)=>{
     console.log("i'm in the colon")
-    const user_account_id=req.params.id
-    const {item_name,description,quantity} =req.body
+    
+    const {user_account_id,item_name,description,quantity} =req.body
     
     knex("item_list")
     .insert({user_account_id,item_name,description,quantity})

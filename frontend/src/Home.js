@@ -3,10 +3,10 @@ import "./Home.css"
 import { useState,useEffect,useContext } from "react";
 import styled from 'styled-components';
 import ReactModal from 'react-modal';
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 const Home = () => {
-
+const Navigate=useNavigate()
 const location=useLocation()
 
   const[addNew,setAddNew]=useState(false)
@@ -18,26 +18,22 @@ const location=useLocation()
   const[itemQuantityState,setItemQuantityState]=useState("")
   const [userId,setUserId]=useState(0)
   const[Logged,setLogged]=useState(false)
-  console.log("location.state")
+  
   useEffect(async ()=>{
+    console.log("here",location.state)
     
-    if(location.state!=null){
       setUserId(location.state)
       await fetch(`http://localhost:3001/item/${location.state}`)
       .then(res=>res.json())
       .then(data=>setItems(data))
-    }
-    else{
-      await fetch("http://localhost:3001")
-      .then(res=>res.json())
-      .then(data=>setItems(data))
-    }
+    
+    
 
 
     
   },[])
     
-  console.log(items)
+  
 
   
  
@@ -46,12 +42,13 @@ const location=useLocation()
 
 
   const posting = async()=>{
-     
+     let temp=location.state
     
-    await fetch(`http://localhost:3001/${location.state}`,{
+    await fetch(`http://localhost:3001/item/${temp}`,{
       method:"POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
+        user_account_id:location.state,
         item_name: document.getElementById("item-name").value,
         description:document.getElementById("item-description").value,
         quantity:document.getElementById("item-quantity").value
@@ -91,23 +88,6 @@ const putting=async(id)=>{
 
 
 }
-  
-
-const itemMap=()=>{
-  return(
-    items.map(item=>
-    <My_Templates id="itemsNon">
-    {item.item_name}{item.description}{item.quantity}
-    </My_Templates>
-    ))
-  
-}
-
-
-
-
-
-
 
 const itemMapLogged=()=>{
 console.log(items)
@@ -153,10 +133,16 @@ return(
         
        </div>
        </ReactModal>
-       <div >
-    Item Name:{ item.item_name}<br></br> 
-    Description:{item.description}<br></br>  
-    Quantity:{item.quantity}
+       <div onClick={()=>{Navigate(`/specific/item/${location.state}`,{state:item} ); window.location.reload(false)}} >
+       <div>
+                Name: {item.item_name}
+            </div>
+            <div>
+                Descr:{item.description}
+            </div>
+            <div>
+                Quantity: {item.quantity}
+            </div>
     </div>
     </div>
   </div>
@@ -171,9 +157,9 @@ return(
 return(
 
 <>
-{userId!=0 &&(
+
 <button id="addingItem" onClick={setAddNew }>Add New</button>
-)}
+
 {addNew &&(
   <>
   <form >
@@ -194,7 +180,7 @@ return(
 )}
 
 
-  {userId==0? itemMap():itemMapLogged()}
+  {itemMapLogged()}
 </>
 )
 }

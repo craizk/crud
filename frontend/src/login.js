@@ -22,7 +22,7 @@ const navigate =useNavigate()
 
 
     const posting = async()=>{
-       
+       let temp=[]
       
         await fetch("http://localhost:3001/user",{
           method:"POST",
@@ -34,33 +34,48 @@ const navigate =useNavigate()
             password:document.getElementById("password").value,
           })
         })
-        .then(res=>res.json()) 
-        .then(data=>console.log(data))    
+        .then(res=>res.json())
+        .then(console.log("posted"))
+
+        await fetch("http://localhost:3001/user")
+        .then(res=>res.json())
+        .then( data=> temp=data)
+       await handleNext(temp)
+        
+        
       }
 
-      const handleNav=async(data)=>{
-        console.log("data",data)
-        
-        let temp= data.filter(elem=> {
-          if((elem.username==username)&&(elem.password==password)){
-            return elem
-          }
-        })
-        
-        navigate(`/${temp[0].id}`,{state:temp[0].id})
-        
-        
-       
-      }
+
+const handleNext =(temp)=>{
+  console.log("next temp",temp)
+  if(temp.length>1)
+  {
+    console.log(temp)
+    console.log(username,password)
+  let temp2=temp.filter(user=> user.username==username && user.password==password)
+  console.log("temp2",temp2)
+  navigate(`/${temp2[0].id}`,{state:temp2[0].id})
+  }
+  else{
+    
+    navigate(`/${temp[0].id}`,{state:temp[0].id})
+  }
+  
+  
+}
+
+      
     
 
 
 
       const loggingIn= async () =>{
-        
+        let temp=[]
        await fetch("http://localhost:3001/user")
         .then(res=>res.json())
-        .then( data=>{return handleNav(data)}) 
+        .then( data=> temp=data) 
+
+       await handleNext(temp)
         
       }
 
@@ -100,11 +115,11 @@ const navigate =useNavigate()
     
         </label>
         <label>Enter password:
-        <input type='text' id='password' placeholder='enter password' />
+        <input type='text' id='password' placeholder='enter password' onChange={async(e)=> await setPassword(e.target.value)}/>
     
         </label>
         </form>
-        <button id='form-submit' onClick={()=>posting()}>Submit</button>
+        <button id='form-submit' onClick={async ()=> await posting()}>Submit</button>
         </>
         )
         }
