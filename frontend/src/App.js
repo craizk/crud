@@ -20,6 +20,7 @@ return (
     <Link to='/login'>login page</Link>
     <Link to='/'>Home</Link>
     <Routes>
+      <Route path='/:id' element={<Home />}></Route>
       <Route path='/' element={<Home />}></Route>
       <Route path='/login' element={<Login />} ></Route>
       </Routes>

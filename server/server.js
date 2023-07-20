@@ -25,6 +25,18 @@ app.get("/user",(req,res)=>{
     
 })
 
+app.get("/:id",(req,res)=>{
+    const id=req.params.id
+    console.log(id)
+    knex("item_list")
+    
+    .where("user_account_id",id)
+    .then(data => {
+        res.status(200).json(data);
+    })
+
+})
+
 
 app.post("/",(req,res)=>{
     
@@ -43,18 +55,30 @@ app.post("/",(req,res)=>{
 })
 
 
-app.patch("/",(req,res)=>{
-    const id =req.body.id
-    const {item_name,description,quantity} =req.body
-    console.log(body)
-    knex("item_list")
-    .where('id',id)
-    .update({
-        item_name,
-        description,
-        quantity,
-    })
-})
+app.put('/', (req, res) => {
+    console.log("made it")
+    const {id, item_name, description, quantity } = req.body;
+    console.log(id, item_name, description, quantity)
+    knex('item_list')
+        .where('id', id)
+        .update({ item_name, description, quantity })
+        .then((rowCount) => {
+            if (rowCount === 0) {
+            return res.status(404).json({
+                message: 'Item not found',
+            });
+            }
+            res.status(200).json({
+            message: 'Item updated successfully',
+            });
+        })
+        .catch((err) =>
+            res.status(500).json({
+            message: 'An error occurred while updating the item',
+            error: err,
+            })
+        );
+    });
 
 app.delete("/",(req,res)=>{
     const body =req.body
