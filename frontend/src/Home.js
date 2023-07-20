@@ -4,20 +4,22 @@ import { useState,useEffect,useContext } from "react";
 import styled from 'styled-components';
 import ReactModal from 'react-modal';
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 const Home = () => {
 const Navigate=useNavigate()
 const location=useLocation()
-
+  const [showAll,setShowAll]=useState(false)
   const[addNew,setAddNew]=useState(false)
   const [items,setItems]=useState([])
   const [itemNameState,setItemNameState]=useState("")
-  const [show,setShow]=useState(false)
+  
   const [isOpen,setIsOpen]=useState(false)
   const [itemDescState,setItemDescState] =useState("")
   const[itemQuantityState,setItemQuantityState]=useState("")
   const [userId,setUserId]=useState(0)
-  const[Logged,setLogged]=useState(false)
+  
+  const [all,setAll]=useState([])
   
   useEffect(async ()=>{
     console.log("here",location.state)
@@ -33,7 +35,11 @@ const location=useLocation()
     
   },[])
     
-  
+  useEffect(()=>{
+    fetch("http://localhost:3001")
+    .then(res=>res.json())
+    .then(data=>setAll(data))
+  },[])
 
   
  
@@ -89,19 +95,42 @@ const putting=async(id)=>{
 
 }
 
+const itemMap=()=>{
+  return(
+    all.map(item=>
+    <My_Templates id="itemsNon" onClick={()=>{Navigate(`/specific/item/${location.state}`,{state:item} ); window.location.reload(false)}}>
+      
+    <div>
+          Name: {item.item_name}
+      </div>
+      <Desc >
+          Descr:{item.description}
+      </Desc>
+      <div>
+          Quantity: {item.quantity}
+      </div>
+      
+    </My_Templates>
+    ))
+  
+}
+
+
+
 const itemMapLogged=()=>{
 console.log(items)
 
 return(
+  <>
   
-  
-  items.map((item,index)=>
+
+  {items.map((item,index)=>
     <>
   <Delete key={`${index}`} onClick={()=>{deleting(item);window.location.reload(false)}}>Delete</Delete>
   <Edit key={`${index}`} id='item' onClick={()=>{
     setItemQuantityState(item.quantity);
     setItemDescState(item.description);
-    setItemQuantityState(item.quantity);
+    setItemNameState(item.item_name);
     setIsOpen(true)}
     }>Edit</Edit>
   
@@ -156,17 +185,29 @@ return(
     </div>
   </div>
   </>
-  )
-  
   
   )}
+  
+  </>
+  )
+
+}
 
 
 
 return(
 
 <>
-
+  <>
+  <button onClick={setShowAll}>Show all</button>
+  {showAll&&(
+    <div>
+    {itemMap()}
+    </div>
+  )
+  
+  }
+  </>
 <button id="addingItem" onClick={setAddNew }>Add New</button>
 
 {addNew &&(
@@ -236,10 +277,9 @@ width:75px;
 `
 
 
-const ItemWrapper=styled.div`
-word-wrap: normal|break-word|initial|inherit;
 
-`
+
+
 const Desc=styled.div`
 Max-Length:100;
 overflow-x:hidden;
@@ -247,7 +287,7 @@ text-overflow: ellipsis;
 white-space: nowrap;
 
 &:hover{
-    background-color:red;
+    
     white-space:wrap
 }
 

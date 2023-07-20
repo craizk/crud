@@ -80,7 +80,7 @@ text-overflow: ellipsis;
 white-space: nowrap;
 
 &:hover{
-    background-color:red;
+    
     white-space:wrap
 }
 
