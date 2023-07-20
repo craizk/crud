@@ -19,9 +19,9 @@ return (
 
   <>
 
-    <Link to='/login'>login page</Link><br></br>
-    <Link to='/'>Home</Link><br></br>
-    <Link to='/'>Logout</Link>
+    <Link to='/login' >login page</Link><br></br>
+    <Link to='/' >Home</Link><br></br>
+    <Link to='/' >Logout</Link>
     <Routes>
       <Route path='/:id' element={<Home />}></Route>
       <Route path='/' element={<NotLoggedin />}></Route>

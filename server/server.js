@@ -114,12 +114,23 @@ app.post("/user",(req,res)=>{
     const body =req.body
     console.log("body",body)
     knex("user_profile")
-    .insert(body)
-    .returning('id')
-    .then((ids)=>
-    res.status(201).json({
-        message:"Posted succesfully",
-        id:ids[0].id}))
+    .select('username')
+    .where('username', body.username)
+    .then((data) => {
+        if (data.length > 0){
+            res.status(404).json({userCreated: false, message: `Username: *${username}* already taken!`});
+        }else{
+            knex('user_profile')
+            .insert(body)
+            .then(() => res.status(201).json({userCreated: true, message: 'Username created successfully'}))
+        }
+    })
+    // .insert(body)
+    // .returning('id')
+    // .then((ids)=>
+    // res.status(201).json({
+    //     message:"Posted succesfully",
+    //     id:ids[0].id}))
     
         
 })

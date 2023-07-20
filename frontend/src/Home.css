@@ -1,0 +1,7 @@
+.modal{
+    width:400px;
+    height:200px;
+    justify-content: center;
+    position: absolute;
+    left: 30%;
+}

@@ -98,7 +98,12 @@ return(
   items.map((item,index)=>
     <>
   <Delete key={`${index}`} onClick={()=>{deleting(item);window.location.reload(false)}}>Delete</Delete>
-  <Edit key={`${index}`} id='item' onClick={setIsOpen}>Edit</Edit>
+  <Edit key={`${index}`} id='item' onClick={()=>{
+    setItemQuantityState(item.quantity);
+    setItemDescState(item.description);
+    setItemQuantityState(item.quantity);
+    setIsOpen(true)}
+    }>Edit</Edit>
   
        
   
@@ -106,23 +111,23 @@ return(
   
   <div>
   <ReactModal
+      className="modal"
       isOpen={isOpen}
-      contentLabel="Example Modal"
+      contentLabel="Example_Modal"
       onRequestClose={() => setIsOpen(false)}
     >
        <div key={`${index}`} id='editing'>
-         This is the content of the pop-up.
+         Edit Your Item.
        
          <form id='editForm' >
          <label>Enter the item name:
          <input type="text" id='item-nameE'  placeholder={item.item_name} onChange={(e)=>setItemNameState(e.target.value)} ></input>
-          
-         </label>
+         </label><br></br>
          <label> Enter item description:
-         <input type='text' id='item-descriptionE' placeholder={item.description} onChange={(e)=>setItemDescState(e.target.value)}/>
-         </label>
+         <input type='text' id='item-descriptionE' placeholder={item.description} onChange={(e)=>{setItemDescState(e.target.value)}}/>
+         </label><br></br>
          <label>Enter quantity
-         <input  type='text' id='item-quantityE' placeholder={item.quantity} onChange={(e)=>setItemQuantityState(e.target.value)}/>
+         <input  type='text' id='item-quantityE' placeholder={item.quantity}  onChange={(e)=>setItemQuantityState(e.target.value)}></input>
          </label>
        
        </form>
