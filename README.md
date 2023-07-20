@@ -9,3 +9,28 @@ Hello,
     Followed by: CREATE DATABASE crud
 
     Followed by: \c crud
+
+    make sure to migrate and run the seeds before start up
+---------------------------------------------
+Home Page,
+
+If you are not logged in you will see all the list items with no functionality
+
+If you ARE logged in, you can add items to your account and edit/delete the items. You will need to type in the values as they were if you choose to edit and submit and nothing changed. This is a goal I hope to fix. 
+
+Clicking delete gets rid of the item
+
+--------------------------------------------------------
+
+Login page,
+
+create a user or login as a current user
+
+Logging in will take you to your item page (home)
+
+---------------------------------------------------------
+
+known bugs
+
+-going from home to login sometimes causes the "destroy is not a function error" refresh the page to fix this
+-

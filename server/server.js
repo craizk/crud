@@ -25,7 +25,7 @@ app.get("/user",(req,res)=>{
     
 })
 
-app.get("/:id",(req,res)=>{
+app.get("/item/:id",(req,res)=>{
     const id=req.params.id
     console.log(id)
     knex("item_list")
@@ -38,7 +38,8 @@ app.get("/:id",(req,res)=>{
 })
 
 
-app.post("/:id",(req,res)=>{
+app.post("/item/:id",(req,res)=>{
+    console.log("i'm in the colon")
     const user_account_id=req.params.id
     const {item_name,description,quantity} =req.body
     
@@ -56,11 +57,12 @@ app.post("/:id",(req,res)=>{
 })
 
 
-app.put('/', (req, res) => {
+app.put('/item/:id', (req, res) => {
     console.log("made it")
     const {id, item_name, description, quantity } = req.body;
     console.log(id, item_name, description, quantity)
     knex('item_list')
+    .where("user_account_id",req.params.id)
         .where('id', id)
         .update({ item_name, description, quantity })
         .then((rowCount) => {
@@ -108,7 +110,7 @@ app.delete("/",(req,res)=>{
 
 
 app.post("/user",(req,res)=>{
-    
+    console.log("i'm in the user")
     const body =req.body
     console.log("body",body)
     knex("user_profile")

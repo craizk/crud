@@ -23,7 +23,7 @@ const location=useLocation()
     
     if(location.state!=null){
       setUserId(location.state)
-      await fetch(`http://localhost:3001/${location.state}`)
+      await fetch(`http://localhost:3001/item/${location.state}`)
       .then(res=>res.json())
       .then(data=>setItems(data))
     }
@@ -75,7 +75,7 @@ const putting=async(id)=>{
   
   
   
-  await fetch("http://localhost:3001",{
+  await fetch(`http://localhost:3001/item/${location.state}`,{
     method:"PUT",
     headers:{'Content-Type': 'application/json'},
     body: JSON.stringify({
@@ -117,7 +117,7 @@ return(
   
   items.map((item,index)=>
     <My_Templates>
-  <Delete key={`${index}`} onClick={()=>deleting(item)}>Delete</Delete>
+  <Delete key={`${index}`} onClick={()=>{deleting(item);window.location.reload(false)}}>Delete</Delete>
   <Edit key={`${index}`} id='item' onClick={setIsOpen}>Edit</Edit>
   
        

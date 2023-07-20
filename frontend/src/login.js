@@ -1,11 +1,13 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { useState,useRef } from "react";
 import { BrowserRouter,useNavigate } from 'react-router-dom';
+import { Button, OutlinedInput, FormControl, InputLabel, IconButton, InputAdornment } from '@mui/material';//Conponent function follows
+import "./login.css"
 
 const Login=()=>{
 
-
+  
 
 const [password,setPassword]=useState("")
 const [username,setusername]=useState("")  
@@ -32,19 +34,8 @@ const navigate =useNavigate()
             password:document.getElementById("password").value,
           })
         })
-        .then(res=>res.json())
-        .then(fetch("http://localhost:3001/user")
-        .then(res=>res.json())
-        .then(data=>setdata(data))
-        .then(datas.map(elem=>{
-          if(elem.username==username){
-            setNewUseState(datas.id)
-          }
-      }))
-        .then(navigate(`/:${userID}`,{state:userID}))
-          
-          
-        )
+        .then(res=>res.json()) 
+        .then(data=>console.log(data))    
       }
 
       const handleNav=async(data)=>{
@@ -77,11 +68,11 @@ const navigate =useNavigate()
 
     return (
         <>
-        <button id="new-user" onClick={async()=>await setNewUseState(true) }>New User</button>
-        <button id="sign-in" onClick={async()=> setLogIn(true) }>Sign in</button>
+        <Button id="new-user" onClick={async()=>await setNewUseState(true) }>New User</Button>
+        <Button id="sign-in" onClick={async()=> setLogIn(true) }>Sign in</Button>
         {logIn && (
           <>
-        <form >
+        <form id="form-box" >
         
         <label> Enter username:
         <input type='text' id='Firstname' placeholder='username' onChange={async(e)=> await setusername(e.target.value)}/>
