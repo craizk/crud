@@ -1,7 +1,7 @@
 import React from "react";
-
+import "./Home.css" 
 import { useState,useEffect,useContext } from "react";
-import EditItem from "./editItem";
+import styled from 'styled-components';
 import ReactModal from 'react-modal';
 import { useLocation } from "react-router-dom";
 
@@ -9,7 +9,7 @@ const Home = () => {
 
 const location=useLocation()
 
-  
+  const[addNew,setAddNew]=useState(false)
   const [items,setItems]=useState([])
   const [itemNameState,setItemNameState]=useState("")
   const [show,setShow]=useState(false)
@@ -22,6 +22,7 @@ const location=useLocation()
   useEffect(async ()=>{
     
     if(location.state!=null){
+      setUserId(location.state)
       await fetch(`http://localhost:3001/${location.state}`)
       .then(res=>res.json())
       .then(data=>setItems(data))
@@ -47,7 +48,7 @@ const location=useLocation()
   const posting = async()=>{
      
     
-    await fetch("http://localhost:3001",{
+    await fetch(`http://localhost:3001/${location.state}`,{
       method:"POST",
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -91,21 +92,38 @@ const putting=async(id)=>{
 
 }
   
+
 const itemMap=()=>{
+  return(
+    items.map(item=>
+    <My_Templates id="itemsNon">
+    {item.item_name}{item.description}{item.quantity}
+    </My_Templates>
+    ))
+  
+}
+
+
+
+
+
+
+
+const itemMapLogged=()=>{
 console.log(items)
 
 return(
   
   
   items.map((item,index)=>
-    <>
-  <div key={`${index}`} onClick={()=>deleting(item)}>Delete</div>
-  
+    <My_Templates>
+  <Delete key={`${index}`} onClick={()=>deleting(item)}>Delete</Delete>
+  <Edit key={`${index}`} id='item' onClick={setIsOpen}>Edit</Edit>
   
        
   
   <div >
-  <div key={`${index}`} id='item' onClick={setIsOpen}>Edit</div>
+  
   <div>
   <ReactModal
       isOpen={isOpen}
@@ -129,16 +147,20 @@ return(
        
        </form>
           
-         <button onClick={async()=> await putting(item.id)} >
+         <button onClick={async()=> {await putting(item.id); window.location.reload(false)}} >
          Submit
         </button>
         
        </div>
        </ReactModal>
-    {item.item_name}{item.description}{item.quantity}
+       <div >
+    Item Name:{ item.item_name}<br></br> 
+    Description:{item.description}<br></br>  
+    Quantity:{item.quantity}
+    </div>
     </div>
   </div>
-  </>
+  </My_Templates>
   )
   
   
@@ -149,6 +171,11 @@ return(
 return(
 
 <>
+{userId!=0 &&(
+<button id="addingItem" onClick={setAddNew }>Add New</button>
+)}
+{addNew &&(
+  <>
   <form >
   <label>Enter the item name:
   <input type='text' id='item-name' placeholder='enter item name' />
@@ -162,12 +189,52 @@ return(
   </label>
 
 </form>
+<button id='form-submit' onClick={async()=>{await posting();setAddNew(false);window.location.reload(false)}}>Submit</button>
+</>
+)}
 
-<button id='form-submit' onClick={()=>posting()}>Submit</button>
-  {itemMap()}
+
+  {userId==0? itemMap():itemMapLogged()}
 </>
 )
 }
 
 
 export default Home
+
+const My_Templates=styled.div`
+width:300px;
+display: grid;
+  grid-rows:1;
+  grid-columns:8;
+  grid-gap: 10px;
+  flex-wrap: wrap;
+background-color: #86d5e8a3;
+
+margin: 13px;
+padding: 10px;
+
+border: 2px solid grey;
+border-radius:15px;
+box-shadow: 0px 8px 16px 4px rgba(0,0,0,0.3);
+word-wrap: break-word;
+
+ &:hover{
+    background-color: #28a6c5a3;
+}
+
+`
+const Delete =styled.div`
+
+&:hover{
+  background-color: red;
+}
+
+`
+const Edit=styled.div`
+
+&:hover{
+  background-color: yellow;
+}
+
+`

@@ -38,17 +38,18 @@ app.get("/:id",(req,res)=>{
 })
 
 
-app.post("/",(req,res)=>{
+app.post("/:id",(req,res)=>{
+    const user_account_id=req.params.id
+    const {item_name,description,quantity} =req.body
     
-    const body =req.body
-    console.log(body)
     knex("item_list")
-    .insert(body)
+    .insert({user_account_id,item_name,description,quantity})
     .returning('id')
     .then((ids)=>
     res.status(201).json({
         message:"Posted succesfully",
-        id:ids[0].id
+        id:ids[0].id,
+        
     })
         
     )
